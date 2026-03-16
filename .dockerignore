@@ -1,0 +1,9 @@
+bin/
+obj/
+.vs/
+.vscode/
+.idea/
+currency-converter.Tests/
+Data/
+*.user
+*.suo

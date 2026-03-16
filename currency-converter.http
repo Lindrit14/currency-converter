@@ -1,0 +1,64 @@
+@host = https://localhost:5001
+
+### ConvertCurrency - EUR to USD
+POST {{host}}/CurrencyConverterService.svc
+Content-Type: text/xml
+SOAPAction: "http://currencyconverter.local/ICurrencyConverterService/ConvertCurrency"
+
+<?xml version="1.0" encoding="utf-8"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <ConvertCurrency xmlns="http://currencyconverter.local/">
+      <request xmlns:m="http://currencyconverter.local/models">
+        <m:Amount>100</m:Amount>
+        <m:FromCurrency>EUR</m:FromCurrency>
+        <m:ToCurrency>USD</m:ToCurrency>
+      </request>
+    </ConvertCurrency>
+  </s:Body>
+</s:Envelope>
+
+### ConvertCurrency - USD to GBP (cross-rate)
+POST {{host}}/CurrencyConverterService.svc
+Content-Type: text/xml
+SOAPAction: "http://currencyconverter.local/ICurrencyConverterService/ConvertCurrency"
+
+<?xml version="1.0" encoding="utf-8"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <ConvertCurrency xmlns="http://currencyconverter.local/">
+      <request xmlns:m="http://currencyconverter.local/models">
+        <m:Amount>250.50</m:Amount>
+        <m:FromCurrency>USD</m:FromCurrency>
+        <m:ToCurrency>GBP</m:ToCurrency>
+      </request>
+    </ConvertCurrency>
+  </s:Body>
+</s:Envelope>
+
+### GetSupportedCurrencies
+POST {{host}}/CurrencyConverterService.svc
+Content-Type: text/xml
+SOAPAction: "http://currencyconverter.local/ICurrencyConverterService/GetSupportedCurrencies"
+
+<?xml version="1.0" encoding="utf-8"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <GetSupportedCurrencies xmlns="http://currencyconverter.local/" />
+  </s:Body>
+</s:Envelope>
+
+### GetRateMetadata
+POST {{host}}/CurrencyConverterService.svc
+Content-Type: text/xml
+SOAPAction: "http://currencyconverter.local/ICurrencyConverterService/GetRateMetadata"
+
+<?xml version="1.0" encoding="utf-8"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Body>
+    <GetRateMetadata xmlns="http://currencyconverter.local/" />
+  </s:Body>
+</s:Envelope>
+
+### Get WSDL
+GET {{host}}/CurrencyConverterService.svc?wsdl
