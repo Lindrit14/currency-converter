@@ -52,7 +52,7 @@ builder.Services.AddHealthChecks()
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
     options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-    options.KnownIPNetworks.Clear();
+    options.KnownNetworks.Clear();
     options.KnownProxies.Clear();
 });
 
@@ -65,18 +65,21 @@ app.UseCertificateForwarding();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseWhen(
-    context => context.Request.Path.StartsWithSegments("/CurrencyConverterService.svc", StringComparison.OrdinalIgnoreCase),
-    branch => branch.Use(async (context, next) =>
-    {
-        if (!(context.User.Identity?.IsAuthenticated ?? false))
+if (securityOptions.RequireMutualTls)
+{
+    app.UseWhen(
+        context => context.Request.Path.StartsWithSegments("/CurrencyConverterService.svc", StringComparison.OrdinalIgnoreCase),
+        branch => branch.Use(async (context, next) =>
         {
-            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            return;
-        }
+            if (!(context.User.Identity?.IsAuthenticated ?? false))
+            {
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                return;
+            }
 
-        await next();
-    }));
+            await next();
+        }));
+}
 
 // Health check endpoint
 app.MapHealthChecks("/health").AllowAnonymous();

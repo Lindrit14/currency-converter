@@ -72,10 +72,13 @@ public static class CertificateAuthenticationSetup
 
         services.AddAuthorization(options =>
         {
-            options.FallbackPolicy = new AuthorizationPolicyBuilder()
-                .AddAuthenticationSchemes(CertificateAuthenticationDefaults.AuthenticationScheme)
-                .RequireAuthenticatedUser()
-                .Build();
+            if (securityOptions.RequireMutualTls)
+            {
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(CertificateAuthenticationDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser()
+                    .Build();
+            }
         });
 
         return services;
